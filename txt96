@@ -1,0 +1,491 @@
+Q1 - a
+package q1;
+class PrintThread extends Thread{
+	@Override
+	public void run() {
+		for (int i = 1; i <= 100; i++) {
+			System.out.println(i + " ");
+		}
+	}	
+}
+class SLIITThread extends Thread{
+	@Override
+	public void run() {
+		for (int i = 1; i <= 100; i++) {
+			System.out.println("SLIIT ");
+		}
+	}
+}
+class ThreadMain{
+	public static void main(String[] args) {
+		Thread thread1 = new Thread(new PrintThread());
+		Thread thread2 = new Thread(new SLIITThread());
+		thread1.start();
+		thread2.start();
+	}
+}
+
+
+
+
+
+Q1 - b
+package q1;
+class NumbersThread extends Thread{
+	//NumbersThread num = new NumbersThread();
+	@Override
+	public synchronized void run() {
+		for (int i = 1; i <= 100; i++) {
+			System.out.print(i + " ");
+		}
+		System.out.println("\n");
+	}
+	
+}
+class ThreadBase extends Thread{
+	public static void main(String[] args) throws InterruptedException {
+		//String main = Thread.currentThread().getName();	
+		Thread thread1 = new Thread(new NumbersThread());
+		Thread thread2 = new Thread(new NumbersThread());
+		Thread thread3 = new Thread(new NumbersThread());
+		thread1.setName("Red");
+		thread2.setName("Blue");
+		thread3.setName("Green");
+		thread1.start();
+		//thread2.sleep(1000);
+		//thread3.sleep(1000);
+		thread2.start();
+		//thread3.sleep(1000); 		
+		thread3.start();		
+		Thread.sleep(1000);
+		for (int i = 0; i < 100; i++) {
+			System.out.print("SLIIT ");
+		}
+		System.out.println("\n");
+		System.out.printf("Thread1 state : " + thread1.getState() + "\n" + "Thread1 is %s",
+				thread1.isAlive() ? "alive " : "dead ");
+	}
+}
+
+
+
+
+
+
+Q1 - c
+package q1;
+
+class Calculation{
+	private int total = 0;
+	public synchronized void sum(int start, int end) {
+		for (int i = start; i <= end; i++) {
+			this.total += i;
+		}
+	}
+	public int getTotal() {
+		return this.total;
+	}
+}
+class TheThread extends Thread{
+	Calculation cal;
+	private int start, end;		
+	public TheThread(int start, int end, Calculation cal) {
+		super();
+		this.start = start;
+		this.end = end;
+		this.cal = cal;
+	}
+	@Override
+	public void run() {			
+		cal.sum(start, end);
+	}
+}
+class ParallelTest extends Thread{
+	public static void main(String[] args) throws InterruptedException {
+		Calculation cal = new Calculation();
+		TheThread thread1 = new TheThread(1, 50000, cal);
+		TheThread thread2 = new TheThread(50001, 100000, cal);
+		thread1.start();
+		thread2.start();		
+		thread1.join();
+		thread2.join();
+		System.out.println("Total : " + cal.getTotal());
+//		int total = 0;
+//		int s = 50001;
+//			for (int i = s; i <= 100000; i++) {
+//				total += i;
+//			}
+//	
+//			System.out.println(total);
+		}
+	
+}
+
+
+
+
+
+Q2 - a
+package q2;
+ class Login{
+	 private static Login instance;
+	 private Login() {
+	 }
+	 public static Login getInstance() {
+		 if(instance == null) {
+			 instance = new Login();
+		 }
+		 return instance;
+	 }
+	 public boolean validateUser(String userName, String password) {
+		 if(userName.equals(password)) {
+			 return true;
+		 }else {
+			 return false;
+		 }
+	 } 
+ }
+ class LoginMain{ 
+	 public static void main(String[] args) {	 
+		Login login = Login.getInstance();
+		System.out.println(login.validateUser("Manju", "Manju"));
+	}
+ }
+
+
+
+
+
+
+Q2 - b
+package q2;
+import java.util.Scanner;
+abstract class MobilePhone{
+	private String model;
+	private float price;
+	public String getModel() {
+		return model;
+	}
+	public void setModel(String model) {
+		this.model = model;
+	}
+	public float getPrice() {
+		return price;
+	}
+	public void setPrice(float price) {
+		this.price = price;
+	}
+	public MobilePhone(String model, float price) {
+		this.model = model;
+		this.price = price;
+	}
+	public MobilePhone( ) {	 
+	}
+	abstract void Display();
+}
+abstract class Television{
+	private String model;
+	private String size;
+	public Television(String model, String size) {
+		this.model = model;
+		this.size = size;
+	}
+	public Television( ) {	 
+	}
+	public String getModel() {
+		return model;
+	}
+	public void setModel(String model) {
+		this.model = model;
+	}
+	public String getSize() {
+		return size;
+	}
+	public void setSize(String size) {
+		this.size = size;
+	}
+	abstract void Display();
+}
+class A10 extends MobilePhone{
+	public A10(String model, float price) {
+		super(model, price);
+	}
+	public A10( ) {	 
+	}
+	@Override
+	void Display() {
+		System.out.println("Model : " + super.getModel());
+		System.out.println("Size : " + super.getPrice());
+	}
+}
+class X25 extends MobilePhone{
+	public X25(String model, float price) {
+		super(model, price);
+	}
+	public X25( ) {	 
+	}
+	@Override
+	void Display() {
+		System.out.println("Model : " + super.getModel());
+		System.out.println("Size : " + super.getPrice());
+	}
+}
+class TPlus extends MobilePhone{
+	public TPlus(String model, float price) {
+		super(model, price);
+	}
+	public TPlus( ) {	 
+	}
+	@Override
+	void Display() {
+		System.out.println("Model : " + super.getModel());
+		System.out.println("Size : " + super.getPrice());
+	}
+}
+class Alpha40 extends Television{
+	public Alpha40(String model, String size) {
+		super(model, size);
+	}
+	public Alpha40() {	 
+	}
+	@Override
+	void Display() {
+		System.out.println("Model : " + super.getModel());
+		System.out.println("Size : " + super.getSize());
+	}	
+}
+class Gamma50 extends Television{
+	public Gamma50(String model, String size) {
+		super(model, size);
+	}
+	public Gamma50() {	 
+	}
+	@Override
+	void Display() {
+		System.out.println("Model : " + super.getModel());
+		System.out.println("Size : " + super.getSize());
+	}
+}
+class Theta65 extends Television{
+	public Theta65(String model, String size) {
+		super(model, size);
+	}
+	public Theta65() {	 
+	}
+	@Override
+	void Display() {
+		System.out.println("Model : " + super.getModel());
+		System.out.println("Size : " + super.getSize());
+	}
+}
+abstract class AbstractFactory{
+	public abstract Television getTelevision(String mobile);
+	public abstract MobilePhone getMobilePhone(String tv);
+}
+class TelevisionFactory extends AbstractFactory{
+	@Override
+	public Television getTelevision(String tv) {
+		if(tv.equals("Alpha40")) {
+			return new Alpha40();
+		}else if(tv.equals("Gamma50")){
+			return new Gamma50();
+		}
+		else if(tv.equals("Theta65")) {
+			return new Theta65();
+		}
+		return null;
+	}
+	@Override
+	public MobilePhone getMobilePhone(String mobile) {
+		return null;
+	}
+}
+class MobileFactory extends AbstractFactory{
+	@Override
+	public MobilePhone getMobilePhone(String mobile) {
+		if(mobile.equals("A10")) {
+			return new A10();
+		}else if(mobile.equals("X25")) {
+			return new X25();
+		}else if(mobile.equals("TPlus")) {
+			return new TPlus();
+		}
+		return null;
+	}
+	@Override
+	public Television getTelevision(String tv) {
+		return null;
+	}
+}
+class Factory{
+	public static AbstractFactory getFactory(String factory){
+		if(factory.equals("mobile")) {
+			return new MobileFactory();
+		}else if(factory.equals("tv")) {
+			return new TelevisionFactory();
+		}
+		return null;
+	}
+}
+class FactoryDemo{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		String modelTV;
+		String modelMobile;
+		System.out.print("Input TV model : ");
+		modelTV = sc.nextLine();
+		System.out.print("Input Mobile model : ");
+		modelMobile = sc.nextLine();
+		MobilePhone mobile = Factory.getFactory("mobile").getMobilePhone(modelMobile);
+		Television tv = Factory.getFactory("tv").getTelevision(modelTV);
+	}
+}
+
+
+
+
+
+Q3 
+package q3;
+import java.util.Scanner;
+class BankDemo{
+	public static void main(String[] args) {
+		Account account = new Account(123);
+		Scanner sc = new Scanner(System.in);
+		double amount = 0;
+		boolean valid = true;
+		String ans = "yes";
+		//System.out.println("Depositting Rs.10,000\n");
+		//account.deposit(10000.00);
+		do {
+			System.out.println("\nDepositting Rs.10,000");
+			account.deposit(10000.00);
+			try {
+				try {
+					do {
+						System.out.print("\nPlease enter amount to be withdrawn = ");
+						amount = sc.nextDouble();
+						System.out.println("Withdrawing Rs." + amount + "/=");
+						account.withdraw(amount);
+						System.out.println("exiting amount = " + account.getBalance());
+					} while (true);
+				} catch (InsufficientBalanceException e) {
+					System.out.println("Sorry, your account remains only Rs." + account.getBalance());
+					e.printStackTrace();
+				}
+			} finally {
+				System.out.println("Do you wish to continue ? yes / no");
+				ans = sc.next();
+			}
+		} while (ans.equals("yes"));
+	}
+}
+class Account{
+	private int accountNo;
+	private double balance;
+	public Account(int accountNo) {
+		super();
+		this.accountNo = accountNo;
+	}
+	public double getBalance() {
+		return balance;
+	}
+	public void withdraw(double amount) throws InsufficientBalanceException {
+		if(amount < this.balance) {
+			this.balance -= amount;
+		}else if(amount > this.balance){
+			throw new InsufficientBalanceException(this.balance);
+		}
+	}
+	public void deposit(double amount) {
+		this.balance += amount;
+	}
+}
+class InsufficientBalanceException extends Exception{
+	private double amount;
+	public InsufficientBalanceException(double amount) {
+		super();
+		this.amount = amount;
+	}
+	public double getAmount() {
+		return this.amount;
+	}
+}
+
+
+
+
+
+Q4
+package q4;
+abstract class Vehicle{
+	private String speed;
+	protected double regularPrice;
+	private String color;
+	public Vehicle(String speed, double regularPrice, String color) {
+		this.speed = speed;
+		this.regularPrice = regularPrice;
+		this.color = color;
+	}
+	public Vehicle(String speed, String color) {
+		super();
+		this.speed = speed;
+		this.color = color;
+	}
+	abstract double getSalesPrice();
+}
+class Car extends Vehicle{
+	public Car(String speed, double regularPrice, String color) {
+		super(speed, regularPrice, color);
+	}
+	@Override
+	double getSalesPrice() {
+		return 0;
+	}
+}
+class Truck extends Vehicle{
+	private double weight;
+	public Truck(String speed, double regularPrice, String color, double weight) {
+		super(speed, regularPrice, color);
+		this.weight = weight;
+	}
+	@Override
+	public double getSalesPrice() {	
+		double price = regularPrice;
+		if(this.weight >2000) {
+			return price * ( 90 / 100.0 );
+		}else {
+			return price * ( 80 / 100.0 );
+		}
+	}
+}
+class Bus extends Vehicle{
+	private int year;
+	private double manufacturerDiscount;
+	public Bus(String speed, double regularPrice, String color, int year, double manufacturerDiscount) {
+		super(speed, regularPrice, color);
+		this.year = year;
+		this.manufacturerDiscount = manufacturerDiscount;
+	}
+	@Override
+	double getSalesPrice() {	
+		return regularPrice - manufacturerDiscount;
+	}	
+}
+class MyOwnAutoShop{	
+	public static void main(String[] args) {
+		Truck truck1 = new Truck("60Kmh", 100000, "red", 2000.00);
+		Bus bus1 = new Bus("100Kmh", 100000, "black", 2010, 2345.456);
+		System.out.println(truck1.getSalesPrice());
+		System.out.println(bus1.getSalesPrice());
+	}
+}
+
+
+
+
+
+
+
+
+
